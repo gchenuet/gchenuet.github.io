@@ -17,6 +17,6 @@ netstat -an | grep :80 | grep -i EST | wc -l
 #### Number of IP connections and IPs connected to port 80:
 
 {% highlight bash %}
-netstat -plan|grep :80|awk {'print $5'}|cut -d: -f 1|sort|uniq -c|sort -nk 1
+netstat -plan | grep :80 | awk {'print $5'} | cut -d: -f 1 | sort | uniq -c | sort -nk 1
 {% endhighlight %}
 
