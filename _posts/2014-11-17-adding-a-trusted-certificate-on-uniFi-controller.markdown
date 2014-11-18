@@ -1,3 +1,4 @@
+---
 layout: post
 title:  "Adding a trusted certificate on UniFi Controller"
 date:   2014-11-17 14:00:31
