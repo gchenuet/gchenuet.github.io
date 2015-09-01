@@ -11,7 +11,7 @@ By default, Nova is able to launch 10 instances builds to run concurrently.
 But actually, Ironic can't deal with it and cause a race condition...
 
 The problem is Ironic try to attach a wrong profile/instance to the node.   
-_Ex: Compute profile on a Controller server._
+_Ex: Compute profile on a Controller server._    
 
 {% highlight bash %}
 2015-08-24 18:18:05.228 1200 ERROR oslo-messaging.rpc.dispatcher [-] Exception during message handling: Node 702d0321-5e9d-49f2-b914-0831bcbdfebd is associated with instance ccc2dc87-81b1-4769-8019-ffa5e3ecb979.
@@ -50,4 +50,6 @@ max-concurrent-builds=2
 **/etc/ironic/ironic.conf**  
 {% highlight bash %}
 rpc-thread-pool-size = 4
-{% endhighlight %}
+{% endhighlight %}    
+
+This is the _default_ value, you can increase them to find a better adjustment.
