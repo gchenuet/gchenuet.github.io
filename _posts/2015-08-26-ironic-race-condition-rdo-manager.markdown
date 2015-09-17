@@ -52,4 +52,5 @@ max-concurrent-builds=2
 rpc-thread-pool-size = 4
 {% endhighlight %}    
 
+Don't forget to restart Ironic & Nova services.
 This is the _default_ value, you can increase them to find a better adjustment.
