@@ -9,7 +9,7 @@ tags: [rdo, rdo-manager, ospd, heat, yaml, network, public-api, floating-ip]
 By default, Public API and Floating IP are set in the same subnet.   
 In some case, it will be useful to split these networks into different subnets and interfaces.   
 
-One option is to dedicate a nic for the External network (Public API) and a bridge mounted on a specific nic for Floating IP:    
+One option is to dedicate a nic for the External network (Public API) and mount a bridge on an other nic for Floating IP:    
 
 ## 1. Apply change in YAML controller file:
 
@@ -43,7 +43,7 @@ resources:
 
 ## 2. Check the result on controller nodes:
 
-After deployment, you have two specifics interface on controller nodes:    
+After deployment, you have two specific interfaces on controller nodes:    
 
 {% highlight bash %}
 [root@ctlr000 ~]# ip a
