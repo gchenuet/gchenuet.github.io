@@ -47,7 +47,7 @@ links:
 timezone:    Europe/Paris
 future:      true
 highlighter: pygments
-markdown:    redcarpet
+markdown:    kramdown
 
 # https://github.com/mojombo/jekyll/wiki/Permalinks
 permalink:   /:categories/:title/
