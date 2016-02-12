@@ -5,7 +5,7 @@ date:   2015-08-26 10:30:51
 categories: rdo rdo-manager ospd ironic nova
 tags: [rdo, rdo-manager, ospd, ironic, nova, race condition, instance, deployment]
 ---
-For a deployment with RDO Manager, I encountered a problem with Ironic & Nova during a deployment of ~30 physical servers.
+With RDO Manager, I encountered a problem with Ironic & Nova during a deployment of ~30 physical servers.
 
 By default, Nova is able to launch 10 instances builds to run concurrently.  
 But actually, Ironic can't deal with it and cause a race condition...
@@ -44,12 +44,12 @@ The workaround consists to:
 
 **/etc/nova/nova.conf**  
 {% highlight bash %}
-max-concurrent-builds=2
+max_concurrent_builds=2
 {% endhighlight %}
 
 **/etc/ironic/ironic.conf**  
 {% highlight bash %}
-rpc-thread-pool-size = 4
+rpc_thread-pool_size = 4
 {% endhighlight %}    
 
 Don't forget to restart Ironic & Nova services.    
