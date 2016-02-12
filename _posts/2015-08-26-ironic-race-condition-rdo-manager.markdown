@@ -49,7 +49,7 @@ max_concurrent_builds=2
 
 **/etc/ironic/ironic.conf**  
 {% highlight bash %}
-rpc_thread-pool_size = 4
+rpc_thread_pool_size = 4
 {% endhighlight %}    
 
 Don't forget to restart Ironic & Nova services.    
