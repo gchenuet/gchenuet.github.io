@@ -36,21 +36,27 @@ _Ex: Compute profile on a Controller server._
 2015-08-24 18:18:05.228 1200 TRACE oslo-messaging.rpc.dispatcher     instance=ref.instance-uuid)
 2015-08-24 18:18:05.228 1200 TRACE oslo-messaging.rpc.dispatcher **NodeAssociated: Node 702d0321-5e9d-49f2-b914-0831bcbdfebd is associated with instance ccc2dc87-81b1-4769-8019-ffa5e3ecb979.**
 2015-08-24 18:18:05.228 1200 TRACE oslo-messaging.rpc.dispatcher
-{% endhighlight %}
+{% endhighlight %}  
 
 The workaround consists to:   
-*    Decrease the number of max concurrent builds from **10** to **2**   
-*    Reduce the pool size of RPC thread from **64** to **4**
+*    Decrease the number of max concurrent builds from **10** to **2**      
+*    Set the number of nodes that you want to deploy on scheduler_max_attempts
+     parameter      
+*    Reduce the pool size of RPC thread from **64** to **4**    
 
 **/etc/nova/nova.conf**  
 {% highlight bash %}
-max_concurrent_builds=2
-{% endhighlight %}
+max_concurrent_builds=2 
+scheduler_max_attempts=30   
+{% endhighlight %}      
 
 **/etc/ironic/ironic.conf**  
 {% highlight bash %}
-rpc_thread_pool_size = 4
+rpc_thread_pool_size = 4    
 {% endhighlight %}    
+
 
 Don't forget to restart Ironic & Nova services.    
 This is the _default_ value, you can increase them to find a better adjustment.
+
+More info: https://access.redhat.com/solutions/2171011
