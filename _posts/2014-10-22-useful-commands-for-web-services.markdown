@@ -6,7 +6,7 @@ categories: web server commands
 tags: [useful commands, logs, nginx, apache, web]
 ---
 Some helpful commands for web services:
-
+<!--excerpt-->
 #### List of currently established connections:
 
 {% highlight bash %}

@@ -7,7 +7,7 @@ tags: [ubiquiti, unifi, ssl, wifi, java]
 ---
 
 At work, I had to replace the self-signed certificate on our Ubiquiti UniFi Controller with a trusted certificate.
-
+<!--excerpt-->
 It is pretty simple and requires only two commands:
 
 *Note that unifi.chain.crt needs to contain the complete CA chain, including the intermediate CAs and the root CA.* 

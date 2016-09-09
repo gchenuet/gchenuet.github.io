@@ -2,20 +2,16 @@
 layout: post
 title:  "Ride around with the Ceph CRUSH Map"
 date:   2016-07-12 12:00:51
-categories: ceph pools osd crushmap rhcs block-storage object-storage filesystem
-tags: [ceph, pools, osd, crushmap, rhcs, block-storage, object-storage, filesystem]
+categories: Ceph pools osd crushmap rhcs block-storage object-storage filesystem
+tags: ceph pools osd crushmap rhcs block-storage object-storage filesystem
 ---
-
-# Introduction      
+CRUSH is the powerful, highly configurable algorithm Red Hat Ceph Storage uses to determine
+how data is stored across the many servers in a cluster.       
         
-CRUSH is the powerful, highly configurable algorithm Red Hat Ceph Storage uses
-to determine how data is stored across the many servers in a cluster.       
+A healthy Ceph Storage deployment depends on a properly configured CRUSH map.
         
-A healthy Ceph Storage deployment depends on a properly configured
-CRUSH map.      
-        
-In this documentation, we will review the Red Hat Ceph Storage architecture
-and explain the purpose of CRUSH.       
+For this blog post, I will review the Red Hat Ceph Storage architecture
+and explain the purpose of CRUSH.          
         
 Using example CRUSH maps, we will show you what works and what does not, and
 explain why.        
@@ -40,8 +36,12 @@ Each object corresponds to a file in a filesystem, which is stored on an
 Object Storage Device. Ceph OSD Daemons handle the read/write operations on
 the storage disks.      
         
-![alt text](https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/ceph-components.jpg "Ceph Components")
-    
+        
+<div style="text-align:center">
+    <img src="https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/ceph-components.jpg" width="500">
+</div>
+        
+        
 _The Ceph Storage Cluster receives data from Ceph Clients–whether it comes
 through a Ceph Object Storage, Ceph Block Device or the Ceph Filesystem using
 librados – and it stores the data as objects._       
@@ -60,7 +60,9 @@ Ceph use three planning concepts for the data placement:
 objects. Pools manage the number of placement groups, the number of replicas,
 and the ruleset for the pool.   
     
-![alt text](https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/pools.jpg "Pools")
+<div style="text-align:center">
+    <img src="https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/pools.jpg" width="500">
+</div>
     
 _Pools are represented by white square. You can set how many OSD are allowed to
 fail without losing data, number of copies/replicas of an object or set the
@@ -72,7 +74,9 @@ object pool that place objects as a group into OSDs. Placement groups reduce
 the amount of per-object metadata when Ceph stores the data in OSDs. A larger
 number of placement groups (e.g., 100 per OSD) leads to better balancing.   
     
-![alt text](https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/PG.jpg "Placement Group")
+<div style="text-align:center">
+    <img src="https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/PG.jpg" width="200">
+</div>
     
 _A placement group (PG) aggregates objects within a pool because tracking
 object placement and object metadata on a per-object basis is computationally
@@ -88,7 +92,9 @@ cluster to the CRUSH algorithm to determine where the data for an object and
 its replicas should be stored, and how to do so across failure domains for
 added data safety among other things.   
     
-![alt text](https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/crush.jpg "Crush Map")
+<div style="text-align:center">
+    <img src="https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/crush.jpg" width="500">
+</div>
     
 _The CRUSH algorithm determines how to store and retrieve data by
 computing data storage locations.
@@ -125,7 +131,9 @@ electrical circuit.
 * __Avoid failed devices__: CRUSH take care of the data placement itself and can
 manage where to place object on the device.     
     
-![alt text](https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/crush-failed-device.jpg "CRUSH failed device")
+<div style="text-align:center">
+    <img src="https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/crush-failed-device.jpg" width="500">
+</div>
     
 _In this example, blue and green objects are relocate to others OSDs_
     
@@ -134,7 +142,9 @@ devices without the need for a central index server to manage data object
 locations, Ceph clusters can store and retrieve data very quickly and scale up
 or down quite easily.   
     
-![alt text](https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/crush-func.jpg "CRUSH Function")
+<div style="text-align:center">
+    <img src="https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/crush-func.jpg" width="500">
+</div>
     
 _Fetching time are reduce with CRUSH, which allows direct communication from
 clients to storage devices_      
@@ -143,7 +153,9 @@ clients to storage devices_
 replicas in that the set of devices sharing replicas for one item also appears
 to be independent of all other items.       
     
-![alt text](https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/declustered-placement.jpg "Declustered Placement")
+<div style="text-align:center">
+    <img src="https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/declustered-placement.jpg" width="200">
+</div>
     
 _CRUSH’s separation of replicas across user-defined failure domains is
 specifically designed to prevent concurrent, correlated failures from causing
@@ -153,7 +165,9 @@ data loss_
 some other data redundancy scheme) in order to protect against data loss in
 the presence of failures.   
     
-![alt text](https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/device-failure.jpg "Device Failure")
+<div style="text-align:center">
+    <img src="https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/device-failure.jpg" width="500">
+</div>
     
 _CRUSH placement policies can separate object replicas across different failure
 domains while still maintaining the desired distribution._    
@@ -194,7 +208,9 @@ __For example__, to address the possibility of concurrent failures, it may be
 desirable to ensure that data replicas are on devices using different shelves,
 racks, power supplies, controllers, and/or physical locations.      
     
-![alt text](https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/Hierarchy-Ceph.png "Hierachical CRUSH Map")
+<div style="text-align:center">
+    <img src="https://raw.githubusercontent.com/gchenuet/gchenuet.github.io/master/images/2016-07-12-ride-around-ceph-crush-map/Hierarchy-Ceph.png" width="500">
+</div>
         
 _Example of a hierarchical CRUSH_     
     

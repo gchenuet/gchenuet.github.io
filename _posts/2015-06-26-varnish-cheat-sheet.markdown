@@ -6,7 +6,7 @@ categories: varnish commands
 tags: [useful commands, logs, varnish, web, caching, cache]
 ---
 Helpful commands about Varnish Cache:
-
+<!--excerpt-->
 ## Varnish > V3
 
 #### Look at an incoming client request of a specific URL:
