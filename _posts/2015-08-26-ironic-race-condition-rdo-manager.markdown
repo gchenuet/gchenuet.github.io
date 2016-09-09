@@ -1,15 +1,15 @@
 ---
 layout: post
-title:  "Ironic Race Condition in RDO Manager Deployment"
+title:  "OpenStack - Ironic Race Condition during Deployment"
 date:   2015-08-26 10:30:51
-categories: rdo rdo-manager ospd ironic nova
+categories: openstack rdo-manager ospd ironic nova
 tags: [rdo, rdo-manager, ospd, ironic, nova, race condition, instance, deployment]
 ---
-With RDO Manager, I encountered a problem with Ironic & Nova during a deployment of ~30 physical servers.
+With RDO Manager/RH-OSP, I encountered a problem with Ironic & Nova during a deployment of ~30 physical servers.
 
 By default, Nova is able to launch 10 instances builds to run concurrently.  
 But actually, Ironic can't deal with it and cause a race condition...
-
+<!--excerpt-->
 The problem is Ironic try to attach a wrong profile/instance to the node.   
 _Ex: Compute profile on a Controller server._    
 

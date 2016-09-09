@@ -1,78 +1,94 @@
-title:            Yauuume
-name:             Yauuume
-description:      Some notes.
-disqus_shortname: 
-reading_time:     true
-words_per_minute: 200
-#Your site's domain goes here. Leave localhost server or blank when working locally.
-#url:               http://localhost:4000
-url:              http://yauuu.me
+# User Settings | Edit there as per required
 
-# Owner/author information
-owner:
-  name:           Guillaume Chenuet
-  avatar:         avatar.jpg
-  bio:            "I am passionate about systems & network administration and more particulary on Cloud Computing technologies like OpenStack. Actually working @ Red Hat."
-  email:          contact@yauuu.me
-  # Social networking links used in footer. Update and remove as you like.
-  twitter:      gchenuet        
-  facebook:       
-  github:         gchenuet
-  stackexchange:  
-  linkedin:       http://fr.linkedin.com/in/guillaumechenuet
-  instagram:      
-  flickr:         
-  tumblr:         
-  # For Google Authorship https://plus.google.com/authorship
-  # google plus id, include the '+', eg +mmistakes
-  google_plus:    +GuillaumeChenuet
+title: yauuume
+url: "http://yauuu.me"
+baseurl: ""
 
-# Background image to be tiled on all pages
-background: 
+# This will show up at the top of index page
+site_heading: >
+    yauuume <span class="faded">'s blog</span>
 
-# Analytics and webmaster tools stuff goes here
-google_analytics:   UA-56034830-1
-google_verify:      
-# https://ssl.bing.com/webmaster/configure/verify/ownership Option 2 content= goes here
-bing_verify:         
+email: guillaume@chenuet.fr
+author: Guillaume Chenuet
+# This description will show up in google search results
+# (for index page) etc.
+description: >
+    Some notes - Guillaume Chenuet
 
-# Links to include in top navigation
-# For external links add external: true
-links:
-  - title: CV
-    url: http://guillaume.chenuet.fr
-    external: true
+# This will what will show against &copy; in the footer
+copyright: yauuume
+# Toggle your short bio, which will displayed on your index page
+# Just toggle it and run jekyll again to see
+intro: false         # Tip: Remove the span from site_heading if intro is set to true
+# This will be displayed in your intro
+short_bio: >
+    Welcome! This is <span>accent</span>, a mobile friendly theme for Jekyll. The main feature of this
+    theme is that you can change the accent color. Refer the
+    <a class="underline different-highlight" href="http://ankitsultana.me/accent/documentation.html">
+        Documentation
+    </a>
+    to know how.
 
-# http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone:    Europe/Paris
-future:      true
-highlighter: rouge
-markdown:    kramdown
+permalink: /:title.html
 
-# https://github.com/mojombo/jekyll/wiki/Permalinks
-permalink:   /:categories/:title/
+# Comments are powered by disqus
+comments: false
 
-# Amount of post to show on home page
-paginate: 5
+# keep about_stub roughly 12 words long for best results
+# This will show up at the bottom of each post
+# Note that about_footer should be true if you want
+# to see author information at the bottom of each post
+about_stub: >
+    Make it simple, but significant.
 
-#
-#kramdown:
-#  auto_ids: true
-#  footnote_nr: 1
-#  entity_output: as_char
-#  toc_levels: 1..6
-#  use_coderay: true
+about_footer: true
 
-coderay:
-  coderay_line_numbers: nil
-  coderay_line_numbers_start: 1
-  coderay_tab_width: 4
-  coderay_bold_every: 10
-  coderay_css: class
+twitter_username: gchenuet
+github_username: gchenuet
+resume_url: guillaume.chenuet.fr
 
-redcarpet:
-  extensions: ["smart", "tables", "no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript", "with_toc_data"]
+favicon: true
+favicon_location: "images/1.jpg"
 
+profile_picture: "images/1.jpg"
+#paginate: 1
+#paginate_path: "/page/:num"
+tracking_id:  UA-56034830-1
 
-include: [".htaccess"]
-exclude: ["lib", "config.rb", "Capfile", "config", "Gemfile", "Gemfile.lock", "README.md", "LICENSE", "log", "Rakefile", "Rakefile.rb", "tmp", "less", "*.sublime-project", "*.sublime-workspace", "test", "spec", "Gruntfile.js", "package.json", "node_modules"]
+# Social Stuff | open graph and twitter cards
+og_image: "images/accent.png" # This will show in facebook thumbnails
+twitter_image: "http://ankitsultana.me/images/accent.png?1234" # This will show in twitter cards
+
+####################################
+####################################
+####################################
+### Build Settings | Don't Touch ###
+####################################
+####################################
+####################################
+
+markdown: kramdown
+
+gems:
+    - jekyll-paginate
+
+sass:
+    style: compressed
+    sass_dir: _sass
+
+# Scopes
+defaults:
+    -
+        scope:
+            path:   ""
+            type:   "pages"
+        values:
+            layout: "page"
+    -
+        scope:
+            path:   ""
+            type:   "posts"
+        values:
+            layout: "post"
+
+exclude: [vendor] # For travis ci
