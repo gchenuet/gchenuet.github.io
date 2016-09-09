@@ -1,1 +1,1 @@
-# yauuu.me
+# (yauuu.me)[yauuu.me]
