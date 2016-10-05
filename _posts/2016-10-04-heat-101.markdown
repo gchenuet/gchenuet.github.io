@@ -1,0 +1,555 @@
+---
+layout: post
+title:  "Openstack - Heat Orchestration Service 101"
+date:   2016-10-04 17:00:51
+categories: openStack heat template orchestration 101 hot stack tutorial
+tags: openstack stack heat orchestration template hot 101 tutorial
+---
+        
+# Think HEAT !      
+        
+Heat is a service to orchestrate composite cloud applications using a declarative template format through an OpenStack-native REST API.   
+        
+* A Heat template describes the infrastructure for a cloud application in text files which are readable and writable by humans, and can be managed by version control tools.   
+        
+* Templates specify the relationships between resources (e.g. this volume is connected to this server). This enables Heat to call out to the OpenStack APIs to create all of your infrastructure in the correct order to completely launch your application.    
+        
+* The software integrates other components of OpenStack. The templates allow creation of most OpenStack resource types (such as instances, floating ips, volumes, security groups, users, etc), as well as some more advanced functionality such as instance high availability, instance autoscaling, and nested stacks.
+        
+* Heat primarily manages infrastructure, but the templates integrate well with software configuration management tools such as Puppet and Ansible.      
+        
+* Operators can customise the capabilities of Heat by installing plugins.       
+        
+# HEAT CLI      
+        
+Overview of the most common commands for managing heat stacks.      
+        
+## List stacks      
+        
+```bash
+$ heat stack-list
+```
+        
+## Validate a stack
+```bash
+$ heat template-validate -f <YAML_TEMPLATE>  
+```
+
+## Launching a new stack
+```bash
+$ heat stack-create -u <URL> -P key_name=heat_key -P image_id=my-image 
+    -P instance_type=m1.small <STACK_NAME>
+```   
+<br/>
+**Arguments:**
+        
+* **-u , --template-url**: URL of template
+
+* **-f , --template-file**: Local path to the template
+
+*  **-P <KEY1=VALUE1;KEY2=VALUE2...>, --parameters <KEY1=VALUE1;KEY2=VALUE2...>**: Parameter values used to create the stack. This can be specified multiple times, or once with parameters separated by a semicolon
+
+*  **-Pf <KEY=FILE>, --parameter-file <KEY=FILE>**: Parameter values from file used to create the stack. This can be specified multiple times. Parameter value would be the content of the file
+
+*  **--tags <TAG1,TAG2>**: A list of tags to associate with the stack.
+
+## List stack events
+```bash
+$ heat event-list <NAME or ID>  
+```
+
+## Describe a stack
+```bash
+$ heat stack-show <NAME or ID>  
+```
+
+## Delete a stack
+```bash
+$ heat stack-delete <NAME or ID>  
+```
+<br/>
+You can find the complete Heat CLI [here](http://docs.openstack.org/cli-reference/heat.html).
+
+# Heat Orchestration Template (HOT)
+
+HOT is a new template format meant to replace the Heat CloudFormation-compatible format (CFN) as the native format supported by the Heat over time.
+
+
+## Structure
+
+HOT templates are defined in YAML and follow the structure outlined below.
+
+```yaml
+heat_template_version: 2016-10-14  
+
+description:  
+  # a description of the template  
+
+parameter_groups:  
+  # a declaration of input parameter groups and order  
+
+parameters:  
+  # declaration of input parameters  
+
+resources:  
+  # declaration of template resources  
+
+outputs:  
+  # declaration of output parameters  
+
+conditions:  
+  # declaration of conditions  
+```
+
+* **heat_template_version**: This key with value `2013-05-23` (or a later date) indicates that the YAML document is a HOT template of the specified version.
+
+* **description**: This optional key allows for giving a description of the template, or the workload that can be deployed using the template.
+
+* **parameter_groups**: This section allows for specifying how the input parameters should be grouped and the order to provide the parameters in. This section is optional and can be omitted when necessary.
+
+* **parameters**: This section allows for specifying input parameters that have to be provided when instantiating the template. The section is optional and can be omitted when no input is required.
+
+* **resources**: This section contains the declaration of the single resources of the template. This section with at least one resource should be defined in any HOT template, or the template would not really do anything when being instantiated.
+
+* **outputs**: This section allows for specifying output parameters available to users once the template has been instantiated. This section is optional and can be omitted when no output values are required.
+
+* **conditions**: This optional section includes statements which can be used to restrict when a resource is created or when a property is defined. They can be associated with resources and resource properties in the `resources` section, also can be associated with outputs in the `outputs` sections of a template.
+
+You can find all heat template versions [here]( http://docs.openstack.org/developer/heat/template_guide/hot_spec.html#heat-template-version).
+
+# Templates     
+
+## My First Template    
+        
+Below you can see a very simple HOT template:       
+            
+```yaml
+heat_template_version: 2013-05-23  
+
+description: Simple template to deploy a single compute instance  
+
+resources:  
+  my_instance:  
+  type: OS::Nova::Server  
+  properties:  
+  image: cirros-0.3.3-x86_64  
+  flavor: m1.small  
+  key_name: my_key  
+  networks:  
+  - network: private-net  
+```
+<br/>
+        
+Copy/paste the above text into your favorite text editor, edit the `image`, `flavor`, `key` and `private network` names to match your OpenStack installation, and save the file.        
+<br/>
+You can use the following command to create a stack from the template:
+
+```bash
+$ heat stack-create my_first_stack -f my_template.yaml  
+```
+<br/>
+Heat then starts a background job that instantiates the resources declared in the template.
+In this case, that resource is just a compute instance.         
+<br/>
+To query the status of this job, use the following command:     
+        
+```bash
+$ heat stack-show my_first_stack  
+```
+<br/>
+The output shows all the information for this stack, including its status, which will eventually be `CREATE_COMPLETE` (or `CREATE_FAILED` if there was an error).       
+        
+## Template with Parameters
+        
+Previous template is extremely simple and not very useful.      
+It is actually not very convenient to have to edit the template to match a particular OpenStack installation.       
+<br/>
+Let's have a look at an improved version:     
+        
+```yaml
+heat_template_version: 2013-05-23  
+
+description: Simple template to deploy a single compute instance  
+
+parameters:  
+  image:  
+    type: string  
+    label: Image name or ID  
+    description: Image to be used for compute instance  
+    default: cirros-0.3.3-x86_64  
+  flavor:  
+    type: string  
+    label: Flavor  
+    description: Type of instance (flavor) to be used  
+    default: m1.small  
+  key:  
+    type: string  
+    label: Key name  
+    description: Name of key-pair to be used for compute instance  
+    default: my_key  
+  private_network:  
+    type: string  
+    label: Private network name or ID  
+    description: Network to attach instance to.  
+    default: private-net  
+
+resources:  
+  my_instance:  
+    type: OS::Nova::Server  
+    properties:  
+      image: { get_param: image }  
+      flavor: { get_param: flavor }  
+      key_name: { get_param: key }  
+    networks:  
+      - network: { get_param: private_network }  
+
+outputs:  
+  instance_ip:  
+    description: IP address of the instance  
+    value: { get_attr: [my_instance, first_address] }  
+```
+<br/>
+        
+This new version of the template adds two new top-level sections:
+
+* **parameters** is used to declare a list of inputs that need to be provided by the user
+
+* **outputs** defines what attributes of the stack to export after it is deployed
+        
+<br/>
+By using a `parameters` section, a template can be made generic.        
+        
+Each parameter is given a name and a type and, optionally, a description and a default value.
+The `get_param` function is then used to insert parameter values into resource properties.      
+        
+Looking at the other side, the `get_attr` function is used in the `outputs` section to extract desired attributes of the resources included in the stack.       
+<br />
+To try this new template, save it and launch it as shown before:        
+_Don't forget to modify parameters with your own informations._         
+        
+```bash
+$ heat stack-create second_stack -f template_with_args.yaml 
+    -P "key=my_key;image=fedora-24-x86_64"  
+```
+        
+<br />
+In this example, the key parameter is set to `my_key` and the image parameter to `fedora-24-x86_64`, so those values will be used for this instantiation of the stack.      
+        
+For any parameters not included in the `-P` option, the defaults are used, which applies to `flavor` and `private_network` in this example.     
+        
+<br />
+Once the stack is created, the `stack-show` command includes the attributes requested in the `outputs` section:         
+        
+```bash
+$ heat stack-show second_stack  
++----------------------+-------------------------------------------------------+  
+| Property             | Value                                                 |  
++----------------------+-------------------------------------------------------+  
+| ...                  |                                                       |  
+| ...                  |                                                       |  
+| outputs              | [                                                     |  
+|                      | {                                                     |  
+|                      | "output_value": "10.10.10.72",                        |  
+|                      | "description": "IP address of the instance",          |  
+|                      | "output_key": "instance_ip"                           |  
+|                      | }                                                     |  
+|                      | ]                                                     |  
+| ...                  |                                                       |  
+| ...                  |                                                       |  
++----------------------+-------------------------------------------------------+  
+```
+        
+## Template with First Boot Execution
+        
+The [cloud-init](https://cloudinit.readthedocs.io/en/latest/) package is the standard for initialization of cloud instances.
+It comes pre-installed on most official cloud images, including Ubuntu and Fedora, and it is even available on the Cirros images used for testing.
+Cloud-init runs during the initial boot of an instance, and it contacts the Nova metadata service API to see if there are any actions that need to be carried out.      
+<br />
+The easiest way to interact with the cloud-init service is by providing a script to run during boot.
+The script is executed as the root user, so it has full access to the instance to install and apply configuration changes as necessary.     
+<br />
+Try the following template, which is a simple extension of the first template:      
+
+```yaml
+heat_template_version: 2013-05-23  
+
+description: Simple template to deploy a single compute instance  
+
+parameters:  
+  image:  
+    type: string  
+    label: Image name or ID  
+    description: Image to be used for compute instance  
+    default: cirros-0.3.3-x86_64  
+  flavor:  
+    type: string  
+    label: Flavor  
+    description: Type of instance (flavor) to be used  
+    default: m1.small  
+  key:  
+    type: string  
+    label: Key name  
+    description: Name of key-pair to be used for compute instance  
+    default: my_key  
+  private_network:  
+    type: string  
+    label: Private network name or ID  
+    description: Network to attach instance to.  
+    default: private-net  
+
+resources:  
+  my_instance:  
+    type: OS::Nova::Server  
+    properties:  
+      image: { get_param: image }  
+      flavor: { get_param: flavor }  
+      key_name: { get_param: key }  
+    networks:  
+      - network: { get_param: private_network }  
+    user_data: |  
+      #!/bin/sh  
+      echo "Hello, World!"  
+    user_data_format: RAW  
+
+outputs:  
+  instance_name:  
+    description: Name of the instance  
+    value: { get_attr: [my_instance, name] }  
+  instance_ip:  
+    description: IP address of the instance  
+    value: { get_attr: [my_instance, first_address] }  
+```
+<br />
+There are just a few changes in this template:
+
+* The `user_data` property on the my_instance resource contains a small initialization script that prints a greeting message.
+
+* The `user_data_format`: `RAW` property tells Heat to provide the `user_data` script as is to the instance, without any additional contents.
+
+* The `instance_name` output is set to export the name assigned to the instance.
+
+```bash
+$ heat stack-create stack_with_init_script -f stack_with_init_script.yaml  
+```
+<br />
+If you want to override a parameter, then provide new values using the `-P` command line option:
+
+```bash
+$ heat stack-create stack_with_init_script -f stack_with_init_script.yaml 
+    -P "private_network=private-net;image=ubuntu-14-04-amd64"  
+```
+
+## Nested Templates
+
+The first approach you may consider, if you need to deploy a multi-instance application with Heat, is to just put several `OS::Nova::Server` resources into your template, along with their wait conditions and anything else they need.      
+
+This approach can work, but it leads to very large template files that are very hard to debug or update.      
+<br />
+__So how do you invoke a sub-template in Heat ?__
+
+Simply create a resource that has its type set to the YAML file of the sub-template.      
+
+If we assume that there is a template called `lib/mysql.yaml` at our disposal that creates a MySQL server, then this is how a master template can invoke it:
+
+```yaml
+heat_template_version: 2013-05-23  
+
+parameters:  
+  image:  
+    type: string  
+    label: Image name or ID  
+    description: Image to be used for server. Please use an Ubuntu based image.  
+    default: trusty-server-cloudimg-amd64  
+  flavor:  
+    type: string  
+    label: Flavor  
+    description: Type of instance (flavor) to be used on the compute instance.  
+    default: m1.small  
+  key:  
+    type: string  
+    label: Key name  
+    description: Name of key-pair to be installed on the compute instance.  
+    default: my_key  
+  private_network:  
+    type: string  
+    label: Private network name or ID  
+    description: Network to attach server to.  
+    default: private  
+
+resources:  
+  mysql:  
+    type: lib/mysql.yaml  
+    properties:  
+      image: { get_param: image }  
+      flavor: { get_param: flavor }  
+      key: { get_param: key }  
+      private_network: { get_param: private_network }  
+      database_name: wordpress  
+      database_user: wordpress_user  
+```
+
+The `mysql` resource in this example represents a complete instantiation of the stack defined by the `lib/mysql.yaml` template, so, in the context of the master template, all the resources defined in the sub-template are encapsulated in a single resource.     
+
+Resources that reference a nested template also have properties and attributes, like regular resources.     
+
+The properties of a nested template resource are the parameters defined in the sub-template, while the attributes are its outputs.      
+
+This is extremely powerful, as nested templates can be thought of as specialized resources that can be written to be opaque and reusable through their inputs and outputs.      
+
+## Deploy a WordPress Stack
+
+As you know how to deploy a nested stack, we are ready to deploy a WordPress Stack based on multiple YAML template files.       
+
+### Nested Stack
+For deploying a WordPress website, we will use a master template with some sub-template for the networking or instances part.       
+
+Let's start with this template:
+
+```yaml
+heat_template_version: 2013-05-23  
+
+description: >
+    Template that installs a wordpress server 
+    and supporting MySQL database running on separate servers  
+
+parameters:  
+  image:  
+       type: string  
+       label: Image name or ID  
+       description: Image to be used for server. Please use an Ubuntu based image.  
+       default: trusty-server-cloudimg-amd64  
+  flavor:  
+       type: string  
+       label: Flavor  
+       description: Type of instance (flavor) to be used on the compute instance.  
+       default: m1.small  
+  key:  
+       type: string  
+       label: Key name  
+       description: Name of key-pair to be installed on the compute instance.  
+       default: my_key  
+  public_net:  
+       type: string  
+       label: Public network name or ID  
+       description: Public network to attach server to.  
+       default: public  
+  dns:  
+      type: comma_delimited_list  
+       label: DNS nameservers  
+       description: Comma separated list of DNS nameservers for the private network.  
+       default: '8.8.8.8'  
+
+resources:  
+  priv_network:  
+       type: lib/private_network.yaml  
+       properties:  
+            public_network: { get_param: public_net }  
+            dns: { get_param: dns }  
+
+  mysql:  
+       type: lib/mysql.yaml  
+       properties:  
+            image: { get_param: image }  
+            flavor: { get_param: flavor }  
+            key: { get_param: key }  
+            private_network: { get_attr: [priv_network, name] }  
+            database_name: wordpress  
+            database_user: wordpress_user  database_password: { get_attr: [mysql, database_password] }  
+
+  wordpress:  
+       type: lib/wordpress.yaml  
+       properties:  
+            image: { get_param: image }  
+            flavor: { get_param: flavor }  
+            key: { get_param: key }  
+            private_network: { get_attr: [priv_network, name] }  
+            mysql_server: { get_attr: [mysql, ip] }  
+            database_name: wordpress  
+            database_user: wordpress_user  
+            database_password: { get_attr: [mysql, database_password] }  
+```     
+
+If we have a closer look of this template, we can retrieved our previous `mysql` example with a new `wordpress` resource. As `mysql` resource, the template used a nested template and require parameters.      
+
+Note that this server needs to obtain some information from the database template, specifically the database password, which is generated as a random string in the MySQL nested template and exported as an output.    
+
+Since outputs become attributes in the master template, all we need to do is use `get_attr` on the `mysql` resource to get the value of `database_password`.      
+
+### Adding Floating IP
+
+The final improvement is to automatically assign a floating IP address to the Wordpress instance.       
+
+For that, we'll use another reusable template and paste it at the end of our previous master template:
+
+```yaml
+resources:  
+  # ...  
+
+  floating_ip:  
+       type: lib/floating_ip.yaml  
+       properties:  
+            port: { get_attr: [wordpress, port] }  
+            public_network: { get_param: public_network }  
+
+outputs:  
+  ip:  
+       description: The public IP address to access Wordpress.  
+       value: { get_attr: [floating_ip, ip] }  
+```
+<br />
+Now, you are ready to launch the stack with the heat command line client:   
+_Don't forget to adjust parameters if required._
+
+```bash
+$ heat stack-create wordpress -f wordpress_stack.yaml  
+```
+
+# Heat Environments
+
+The heat command line client is pretty smart, it finds all the nested template references in the master template and then uploads all the needed files to Heat as a package.      
+
+But OpenStack Horizon Dashboard does not have the ability to do that at this time, so the templates we showed above, or actually any templates that reference other templates, cannot be launched from the web dashboard.   
+
+Heat provides an alternative way to nest templates called environments, which Horizon supports.       
+
+An environment file is a YAML file that has global definitions that are imported before a template is parsed.
+What's interesting is that an environment file can be used to assign custom resource types to nested templates.     
+
+Consider the following environment file:
+
+```yaml
+resource_registry:  
+  Lib::RH::MySQL: https://raw.githubusercontent.com/gchenuet/heat-tutorial/master/lib/mysql.yaml  
+  Lib::RH::Wordpress: https://raw.githubusercontent.com/gchenuet/heat-tutorial/master/lib/wordpress.yaml  
+  Lib::RH::Flasky: https://raw.githubusercontent.com/gchenuet/heat-tutorial/master/lib/flasky.yaml  
+  Lib::RH::Tiny: https://raw.githubusercontent.com/gchenuet/heat-tutorial/master/lib/tiny.yaml  
+  Lib::RH::KeyPair: https://raw.githubusercontent.com/gchenuet/heat-tutorial/master/lib/keypair.yaml  
+  Lib::RH::PrivateNetwork: https://raw.githubusercontent.com/gchenuet/heat-tutorial/master/lib/private_network.yaml  
+  Lib::RH::FloatingIP: https://raw.githubusercontent.com/gchenuet/heat-tutorial/master/lib/floating_ip.yaml  
+  Lib::RH::HAProxy: https://raw.githubusercontent.com/gchenuet/heat-tutorial/master/lib/haproxy.yaml  
+```
+
+The `resource_registry` section contains a mapping of custom resource types to the URLs of the nested templates that implement them.      
+
+For this example, we have included the four templates we used to deploy Wordpress, and named them with a `Lib` prefix, to indicate that they come from a library of templates and followed that with RedHat initials, `RH`, as way of a namespace.       
+Finally, we gave a name to the template in the third part of the type.      
+<br />
+After Heat imports this environment file, it can recognize the custom types, so for example, the WordPress server can be defined as follows:
+
+```yaml
+wordpress:  
+  type: Lib::RH::Wordpress  
+  properties:  
+  # ...  
+```
+
+If you are using the command line client, then an environment file can be given as follows:
+
+```bash
+$ heat stack-create wordpress -f wordpress_stack.yaml -e lib/env.yaml  
+```
+
+# Acknowledgements:
+
+* This article is based on [OpenStack Heat wiki page](http://docs.openstack.org/developer/heat/) and [Rackspace developer blog post](https://developer.rackspace.com/blog/openstack-orchestration-in-depth-part-1-introduction-to-heat/).
+* You can find some HOT template examples on my [Github](https://github.com/gchenuet/heat-tutorial)

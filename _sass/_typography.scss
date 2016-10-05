@@ -12,7 +12,11 @@
     p {
         line-height: $base-line-height;
     }
-    h1, h2, h3, h4, h5, h6, dl {
+    h1 {
+        text-align: center;
+        margin: 1em 0;
+    }
+    h2, h3, h4, h5, h6, dl {
         margin: 1em 0;
     }
     code {
