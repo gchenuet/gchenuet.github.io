@@ -1,12 +1,12 @@
 // Font stacks
-$font-stack-one: 'ubuntu';
+$font-stack-one: 'Roboto Slab';
 $font-stack-three: 'Montserrat';
 $code-font: 'Menlo', 'Roboto Mono', 'Roboto';
 
 // Spacing and Sizes
 $base-font-size: 0.8em;
 $base-line-height: 1.3;
-$base-spacing: $base-line-height * 1em;
+$base-spacing: $base-line-height * 1.3em;
 $small-spacing: $base-spacing / 2;
 $max-width: 800px;
 
