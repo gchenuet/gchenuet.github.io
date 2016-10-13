@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Ride around with the Ceph CRUSH Map"
+title:  "Ceph - Look around the CRUSH Map"
 date:   2016-07-12 12:00:51
 categories: Ceph pools osd crushmap rhcs block-storage object-storage filesystem
 tags: ceph pools osd crushmap rhcs block-storage object-storage filesystem
