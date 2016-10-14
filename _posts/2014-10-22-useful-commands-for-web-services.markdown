@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "Useful commands for web services"
+title:  "Web - Useful commands for web services"
 date:   2014-10-22 18:56:51
 categories: web server commands
 tags: [useful commands, logs, nginx, apache, web]
 ---
 Some helpful commands for web services:
-<!--excerpt-->
+
 #### List of currently established connections:
 
 {% highlight bash %}

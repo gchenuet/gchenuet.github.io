@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "Varnish Cheat Sheet"
+title:  "Web - Varnish Cheat Sheet"
 date:   2015-06-26 10:30:51
 categories: varnish commands
 tags: [useful commands, logs, varnish, web, caching, cache]
 ---
 Helpful commands about Varnish Cache:
-<!--excerpt-->
+
 ## Varnish > V3
 
 #### Look at an incoming client request of a specific URL:
@@ -41,7 +41,7 @@ varnishlog -c -m RxHeader:"Host: yauuu.me" | grep Age
 varnishlog -c -o RxURL post/123.htm
 {% endhighlight %}
 
-#### Look at a a backend request of a specific URL:
+#### Look at a backend request of a specific URL:
 
 {% highlight bash %}
 varnishlog -b -o TxURL post/123.htm
