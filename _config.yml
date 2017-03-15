@@ -56,8 +56,8 @@ profile_picture: "images/1.jpg"
 tracking_id:  UA-56034830-1
 
 # Social Stuff | open graph and twitter cards
-#og_image: "images/accent.png" # This will show in facebook thumbnails
-#twitter_image: "http://ankitsultana.me/images/accent.png?1234" # This will show in twitter cards
+og_image: "images/1.jpg" # This will show in facebook thumbnails
+twitter_image: "http://yauuu.me/images/1.jpg" # This will show in twitter cards
 
 ####################################
 ####################################
