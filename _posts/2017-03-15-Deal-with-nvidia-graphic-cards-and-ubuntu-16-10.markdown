@@ -10,14 +10,15 @@ tags: ubuntu 16.10 nvidia graphic-card bumblebee tutorial
 
 At **[leboncoin](https://leboncoin.fr)**, we're using **Lenovo Thinkpad T460p** laptop with a serious hardware config (Intel Core i7 vPro, 16Go RAM, Dual GFX Intel/Nvidia & SSD) which is comfy for our daily tasks.
 	
-But last week, some artefacts appeared for black pixels on one of my display screens *(finally due to a bad cable...)* and I also noticed that I was using only the Intel card and never the other one (Nvidia).
+But last week, some artefacts appeared (black pixels blinking) on my screen *(finally due to a bad cable...)* and I also noticed that I was only using the Intel card and never the other one (Nvidia).
 	
 So I decided to setup the Nvidia graphic card and install drivers and tools as Bumblebee for example.
+	
 Obviously, the Internets has a lot of informations about setup, etc, but I faced some troubles to setup it on **Ubuntu 16.10**.
 	
-This quick guide is a sum up of all of my researches and provided a working method.
+This quick guide is a sum up of all of my researches and provide a working method.
 	
-It's based on **Nvidia GM108M [GeForce 940MX]** and **Ubuntu 16.10**.
+Based on **Nvidia GM108M [GeForce 940MX]** and **Ubuntu 16.10**.
 	
 # Graphic Card setup
 
@@ -53,7 +54,7 @@ From *System Settings* or directly from the menu / Dash, open *Software & Update
 	
 Currently, there's a bug with Nvidia graphic cards and Kernel >= 4.8 and the workaround consists to **disable the Power Management for PCI Express cards** in **GRUB**
 
-#### Add the kernel option
+###### Add the kernel option
 	
 Add `pcie_port_pm=off` kernel option on `GRUB_CMDLINE_LINUX_DEFAULT` line in `/etc/default/grub`
 	
@@ -71,7 +72,7 @@ GRUB_CMDLINE_LINUX=""
 [...]
 ```
 
-#### Update GRUB
+###### Update GRUB
 
 ```bash
 $ sudo update-grub
@@ -79,10 +80,11 @@ $ sudo update-grub
 	
 If interested, issues are opened for [Nvidia](https://devtalk.nvidia.com/default/topic/971733/linux/-370-28-with-kernel-4-8-on-gt-2015-machines-driver-claims-card-not-supported-if-nvidia-is-not-primary-card/) and [Bumblebee](https://github.com/Bumblebee-Project/Bumblebee/issues/810)
 	
-**Once done, restart your system !**
 
 #### Verify !
 
+**Once done, restart your system !**
+	
 To ensure your Nvidia card is correctly installed, you can try these commands:
 
 - **dmesg**
@@ -95,7 +97,7 @@ To ensure your Nvidia card is correctly installed, you can try these commands:
   ```bash
   $ nvidia-setup
   ```
-And verify informations about your graphic card.
+And verify informations about your graphic card *(GPU 0)*.
 
 - **glxinfo**
 
@@ -123,10 +125,10 @@ $ sudo apt install bumblebee
 	
 Open **/etc/modprobe.d/bumblebee.conf** with a text editor (as root) and add your driver a the end of file:
 ```bash
-# 370
-blacklist nvidia-370
-blacklist nvidia-370-updates
-blacklist nvidia-experimental-370
+# 375
+blacklist nvidia-375
+blacklist nvidia-375-updates
+blacklist nvidia-experimental-375
 ```
 	
 > Note: If you install some newer Nvidia graphics drivers (nvidia-378, etc.), you'll need to add them too in the same way.
