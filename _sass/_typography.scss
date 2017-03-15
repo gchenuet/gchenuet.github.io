@@ -14,13 +14,13 @@
     }
     h1 {
         text-align: center;
-        margin: 1em 0;
+        margin: 2em 0 0 0;
     }
     h2, h3, h4, h5, h6, dl {
-        margin: 1em 0;
+        margin: 1.5em 0 0 0;
     }
     code {
-        font-size: $base-font-size;
+        font-size: .9em;
     }
     .post-title {
         margin-top: 0.1em;
@@ -31,6 +31,7 @@
     }
     h1 {
         font-size: 35px;
+	color: #e60e00;
     }
     h2 {
         font-size: 32px;
@@ -48,7 +49,7 @@
         font-size: 20px;
     }
     p {
-        font-size: 19px;
+        font-size: 17px;
         margin: $base-spacing/3 0;
         font-weight: lighter;
     }
@@ -121,12 +122,12 @@
         list-style-type: decimal;
     }
     li {
-      font-size: 19px;
+      font-size: 17px;
       font-weight: lighter;
       margin: 0.8em 0em 0.8em 0.5em;
     }
     li p {
-        font-size: 19px;
+        font-size: 17px;
     }
 
 }
