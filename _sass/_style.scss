@@ -5,7 +5,7 @@
 @import "rrssb";
 
 html {
-	height: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
 }
@@ -13,6 +13,19 @@ body {
     font-family: $font-stack-one;
     height: 100%;
     overflow: auto;
+}
+@media (prefers-color-scheme: dark) {
+    body {
+        font-family: $font-stack-one;
+        height: 100%;
+        overflow: auto;
+	background-color: #262626;
+	color: #FFFFFF;
+    }
+    img {
+	opacity: 0.8;
+
+    }
 }
 .site-name {
     color: $accent-color;
@@ -66,7 +79,6 @@ body {
     }
 }
 #intro-img {
-    width: 150px;
     height: 110px;
     border-radius: 50%;
     border: 2px solid transparent;
@@ -108,7 +120,19 @@ a:hover {
     border-radius: 20px;
     background: #fff;
     padding: $base-spacing/4 $base-spacing;
+    margin: 10px;
     color: $medium-gray-color;
+}
+@media (prefers-color-scheme: dark) {
+    .button {
+        font-weight: lighter;
+        font-size: 13px;
+        border-radius: 20px;
+        background: #262626;
+        padding: $base-spacing/4 $base-spacing;
+    	margin: 10px;
+        color: $medium-gray-color;
+    }
 }
 .button:hover {
     background: $accent-color;
@@ -243,6 +267,29 @@ footer {
     background: #000;
 }
 
+@media (prefers-color-scheme: dark) {
+    .back-outer {
+        text-align: center;
+        width: $big-circle-size;
+        height: $big-circle-size;
+        //border: 2px solid #000;
+        border-radius: $big-circle-size;
+        background-color: #e60e00;
+        padding: 0;
+    }
+    .back-inner {
+        height: 24px;
+        width: 24px;
+        margin: 3px 3px;
+        border: 2px solid #fff;
+        border-radius: 24px;
+        background: #262626;
+    }
+    .back-inner:hover {
+        background: #e60e00;
+    }
+}
+
 /* Paginate
 * * * * * * * * * * * */
 .pagination {
@@ -289,7 +336,6 @@ hr {
 }
 .about-img {
     height: $about-image-size-height;
-    width: $about-image-size-width;
     border-radius: $about-image-size;
     margin: $base-spacing/3 $base-spacing/5;
     margin-right: $base-spacing;

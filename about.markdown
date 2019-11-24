@@ -9,10 +9,13 @@ Hi! My name is Guillaume !
 
 > Make it simple, but significant.
 
-I am passionate about Sysadmin and Automation stuff and more particulary on Cloud Computing technologies like OpenStack.
 
-I'm currently DevOps in the Engineer Productivity team at [leboncoin](https://leboncoin.fr) involved in CI/CD processes & Release Cycle.
+Currently at [leboncoin](https://leboncoin.fr) as DevOps Engineer Productivity. 
 
-Previously working as OpenStack Technical Cloud Consultant at [Red Hat](https://redhat.com), focusing on OpenStack customers design requests & challenges.
+I'm passionate about new technologies and more particularly to Automation processes and Cloud Computing technologies.
+
+Previously at [Red Hat](https://redhat.com) as OpenStack Cloud Technical Consultant and Managed Services System Administrator at eNovance.
+
+I've completed a master at the European Institute of Information Technology (Epitech) in Paris.
 
 You can find my resume [here](http://guillaume.chenuet.fr).

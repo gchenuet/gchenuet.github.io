@@ -112,6 +112,13 @@
       padding: 0.1em 0.1em 0.1em 0.1em;
       border-radius: 0.3em;
     }
+    @media (prefers-color-scheme: dark) {
+      p > code {
+        color: #616161;
+        padding: 0.1em 0.1em 0.1em 0.1em;
+        border-radius: 0.3em;
+      }
+    }
     ul, ol {
         padding: $base-spacing/5 $base-spacing;
     }

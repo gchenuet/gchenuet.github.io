@@ -48,9 +48,9 @@ github_username: gchenuet
 resume_url: guillaume.chenuet.fr
 
 favicon: true
-favicon_location: "images/1.jpg"
+favicon_location: "images/gc.png"
 
-profile_picture: "images/1.jpg"
+profile_picture: "images/gc.png"
 #paginate: 1
 #paginate_path: "/page/:num"
 tracking_id:  UA-56034830-1
